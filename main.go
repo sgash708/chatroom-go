@@ -1,13 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	// h is host?
 	go h.run()
 
 	router := gin.New()
-	// read html
 	router.LoadHTMLFiles("index.html")
 
 	router.GET("/room/:roomId", func(c *gin.Context) {

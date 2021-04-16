@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -39,7 +40,7 @@ func (s subscription) readPump() {
 		c.ws.Close()
 	}()
 	c.ws.SetReadLimit(maxMessageSize)
-	c.ws.SetReadDeadline(time.Now().Add(ponWait))
+	c.ws.SetReadDeadline(time.Now().Add(pongWait))
 	c.ws.SetPongHandler(func(string) error { c.ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, msg, err := c.ws.ReadMessage()
@@ -85,7 +86,7 @@ func (s *subscription) writePump() {
 	}
 }
 
-func serverWs(w http.ResponeWriter, r *http.Request, roomId string) {
+func serverWs(w http.ResponseWriter, r *http.Request, roomId string) {
 	fmt.Print(roomId)
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
